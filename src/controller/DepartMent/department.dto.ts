@@ -1,7 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsOptional, IsString, IsDateString, IsNumber, Min, MinLength, IsIn } from 'class-validator';
 
-export class CreateNhanSuDto {
+export class CreateDepartmentDto {
   @IsNotEmpty({ message: 'Họ tên là bắt buộc' })
   @IsString({ message: 'Họ tên phải là chuỗi' })
   hoTen!: string;
@@ -99,7 +99,7 @@ export class CreateNhanSuDto {
   trangThai?: string;
 }
 
-export class UpdateNhanSuDto {
+export class UpdateDepartmentDto {
   @ApiPropertyOptional({
     description: 'Full name of the personnel',
     example: 'Nguyễn Văn A'

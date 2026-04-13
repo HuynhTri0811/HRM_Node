@@ -15,16 +15,37 @@ export class LogService {
     return log.save();
   }
 
-  async findAll(limit: number = 100): Promise<Log[]> {
-    return this.logModel.find().sort({ timestamp: -1 }).limit(limit).exec();
+  async findAll(limit: number = 100, page: number = 1): Promise<Log[]> {
+    const sanitizedLimit = Math.max(1, Math.min(limit, 100000));
+    const sanitizedPage = Math.max(1, page);
+    return this.logModel
+      .find()
+      .sort({ timestamp: -1 })
+      .skip((sanitizedPage - 1) * sanitizedLimit)
+      .limit(sanitizedLimit)
+      .exec();
   }
 
-  async findByLevel(level: string, limit: number = 100): Promise<Log[]> {
-    return this.logModel.find({ level }).sort({ timestamp: -1 }).limit(limit).exec();
+  async findByLevel(level: string, limit: number = 100, page: number = 1): Promise<Log[]> {
+    const sanitizedLimit = Math.max(1, Math.min(limit, 100000));
+    const sanitizedPage = Math.max(1, page);
+    return this.logModel
+      .find({ level })
+      .sort({ timestamp: -1 })
+      .skip((sanitizedPage - 1) * sanitizedLimit)
+      .limit(sanitizedLimit)
+      .exec();
   }
 
-  async findByContext(context: string, limit: number = 100): Promise<Log[]> {
-    return this.logModel.find({ context }).sort({ timestamp: -1 }).limit(limit).exec();
+  async findByContext(context: string, limit: number = 100, page: number = 1): Promise<Log[]> {
+    const sanitizedLimit = Math.max(1, Math.min(limit, 100000));
+    const sanitizedPage = Math.max(1, page);
+    return this.logModel
+      .find({ context })
+      .sort({ timestamp: -1 })
+      .skip((sanitizedPage - 1) * sanitizedLimit)
+      .limit(sanitizedLimit)
+      .exec();
   }
 
   async deleteOldLogs(days: number = 30): Promise<any> {

@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { NhanSu } from './nhan-su.entity';
 import { NhanSuController } from './nhan-su.controller';
 import { NhanSuService } from './nhan-su.service';
-import { LogModule } from '../../logs/log.module';
+import { LogModule } from '../../logs_hrm/log.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([NhanSu]), LogModule],

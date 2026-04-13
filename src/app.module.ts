@@ -5,9 +5,11 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatabaseModule } from './database/database.module';
 import { NhanSuModule } from './controller/NhanSu/nhan-su.module';
-import { LogModule } from './logs/log.module';
+import { LogModule } from './logs_hrm/log.module';
+import { AuthModule } from './auth/auth.module';
 import { LoggingInterceptor } from './common/logging.interceptor';
 import configuration from './config/configuration';
+import { DepartmentModule } from './controller/DepartMent/deparment.module';
 
 @Module({
   imports: [
@@ -19,6 +21,8 @@ import configuration from './config/configuration';
     DatabaseModule,
     NhanSuModule,
     LogModule,
+    AuthModule,
+    DepartmentModule
   ],
   controllers: [AppController],
   providers: [

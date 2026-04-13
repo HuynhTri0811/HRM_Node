@@ -1,5 +1,5 @@
-import { Controller, Get, Post, Body, Param, Put, Delete, HttpException, HttpStatus } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody } from '@nestjs/swagger';
+import { Controller, Get, Post, Body, Param, Put, Delete, HttpException, HttpStatus, DefaultValuePipe, ParseIntPipe, Query } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody, ApiQuery } from '@nestjs/swagger';
 import { NhanSu } from './nhan-su.entity';
 import { NhanSuService } from './nhan-su.service';
 import { CreateNhanSuDto, UpdateNhanSuDto } from './nhan-su.dto';
@@ -11,9 +11,14 @@ export class NhanSuController {
 
   @Get()
   @ApiOperation({ summary: 'Get all personnel' })
+  @ApiQuery({ name: 'page', required: false, description: 'Page number for pagination', example: 1 })
+  @ApiQuery({ name: 'limit', required: false, description: 'Number of records per page', example: 100 })
   @ApiResponse({ status: 200, description: 'List of all personnel', type: [NhanSu] })
-  findAll(): Promise<NhanSu[]> {
-    return this.nhanSuService.findAll();
+  findAll(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page = 1,
+    @Query('limit', new DefaultValuePipe(100), ParseIntPipe) limit = 100,
+  ): Promise<NhanSu[]> {
+    return this.nhanSuService.findAll(limit, page);
   }
 
   @Get(':id')
@@ -44,10 +49,11 @@ export class NhanSuController {
           diaChi: '123 Đường ABC, Quận 1, TP.HCM',
           ngaySinh: '1990-01-01',
           chucVu: 'Nhân viên kinh doanh',
-          phongBan: 'Phòng Kinh Doanh',
+          phongBan: 1, // Assuming this is the ID of an existing department
           ngayVaoLam: '2023-01-15',
           luongCoBan: 15000000,
-          trangThai: 'active'
+          trangThai: 'active',
+          password: 'P@ssw0rd123'
         }
       },
       'minimal-example': {

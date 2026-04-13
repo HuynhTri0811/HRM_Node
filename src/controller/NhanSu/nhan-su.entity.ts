@@ -1,5 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Department } from '../DepartMent/deparment.entity';
 
 @Entity('nhan_su')
 export class NhanSu {
@@ -14,6 +15,10 @@ export class NhanSu {
   @ApiProperty({ description: 'Email address', example: 'nguyenvana@example.com' })
   @Column({ name: 'email', length: 255, unique: true })
   email!: string;
+
+  @ApiProperty({ description: 'Password', writeOnly: true, example: 'P@ssw0rd123' })
+  @Column({ name: 'password', length: 255, nullable: true, select: false })
+  password?: string;
 
   @ApiPropertyOptional({ description: 'Phone number', example: '0123456789' })
   @Column({ name: 'so_dien_thoai', length: 20, nullable: true })
@@ -31,9 +36,10 @@ export class NhanSu {
   @Column({ name: 'chuc_vu', length: 255, nullable: true })
   chucVu?: string;
 
-  @ApiPropertyOptional({ description: 'Department', example: 'Phòng Kinh Doanh' })
-  @Column({ name: 'phong_ban', length: 255, nullable: true })
-  phongBan?: string;
+  @ApiPropertyOptional({ description: 'Department', type: () => Department })
+  @ManyToOne(() => Department)
+  @JoinColumn({ name: 'phong_ban' })
+  phongBan?: Department;
 
   @ApiPropertyOptional({ description: 'Hire date', example: '2023-01-15' })
   @Column({ name: 'ngay_vao_lam', type: 'date', nullable: true })
