@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
-@Entity('nhan_su')
+@Entity('department')
 export class Department {
   @ApiProperty({ description: 'Unique identifier', example: 1 })
   @PrimaryGeneratedColumn()
@@ -19,8 +19,6 @@ export class Department {
   @ApiProperty({ description: 'Parent department ID', example: 1 })
   @Column({ name: 'department_parent', nullable: true })
   Department_Parrent!: number;
-
-
   
 
 
