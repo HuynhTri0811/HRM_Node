@@ -1,4 +1,5 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { scryptSync, timingSafeEqual } from 'crypto';
 import { NhanSuService } from '../controller/NhanSu/nhan-su.service';
 import { LogService } from '../logs_hrm/log.service';
@@ -8,6 +9,7 @@ export class AuthService {
   constructor(
     private readonly nhanSuService: NhanSuService,
     private readonly logService: LogService,
+    private readonly jwtService: JwtService,
   ) {}
 
   private hashPassword(password: string): string {
@@ -42,6 +44,9 @@ export class AuthService {
 
     const { password: _password, ...userWithoutPassword } = nhanSu;
 
+    const payload = { sub: nhanSu.id, email: nhanSu.email, role: nhanSu.role };
+    const accessToken = this.jwtService.sign(payload);
+
     await this.logService.create({
       level: 'info',
       message: `Login success for email: ${email}`,
@@ -52,6 +57,8 @@ export class AuthService {
     return {
       message: 'Đăng nhập thành công',
       user: userWithoutPassword,
+      accessToken,
+      expiresIn: 3600,
     };
   }
 }

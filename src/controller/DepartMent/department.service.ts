@@ -7,6 +7,7 @@ import { CreateDepartmentDto } from './department.dto';
 
 @Injectable()
 export class DepartmentService {
+
   constructor(
     @InjectRepository(Department)
     private departmentRepository: Repository<Department>,
@@ -40,4 +41,11 @@ export class DepartmentService {
         throw new Error('Error creating department');
       }
     }
+     async delete(id: number): Promise<void> {
+              const result = await this.departmentRepository.update(id, { isDeleted: true });
+        if (result.affected === 0) {
+            throw new Error('Department not found');
+        }
+    throw new Error('Method not implemented.');
+  }
 }

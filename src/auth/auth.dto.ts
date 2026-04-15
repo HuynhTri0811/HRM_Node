@@ -20,3 +20,35 @@ export class LoginDto {
   @MinLength(8, { message: 'Mật khẩu phải có ít nhất 8 ký tự' })
   password!: string;
 }
+
+export class LoginResponseDto {
+  @ApiProperty({
+    description: 'Success message',
+    example: 'Đăng nhập thành công',
+  })
+  message!: string;
+
+  @ApiProperty({
+    description: 'User information',
+    example: {
+      id: 1,
+      hoTen: 'Nguyễn Văn A',
+      email: 'nguyenvana@example.com',
+      soDienThoai: '0123456789',
+      chucVu: 'Nhân viên kinh doanh',
+    },
+  })
+  user!: any;
+
+  @ApiProperty({
+    description: 'JWT access token',
+    example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+  })
+  accessToken!: string;
+
+  @ApiProperty({
+    description: 'Token expiration time in seconds',
+    example: 3600,
+  })
+  expiresIn!: number;
+}

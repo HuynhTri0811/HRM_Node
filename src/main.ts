@@ -11,6 +11,19 @@ async function bootstrap() {
     .setDescription('API for Human Resource Management System')
     .setVersion('1.0')
     .addTag('nhan-su', 'Personnel management endpoints')
+    .addTag('department', 'Department management endpoints')
+    .addTag('auth', 'Authentication endpoints')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'JWT',
+        description: 'Enter JWT token',
+        in: 'header',
+      },
+      'JWT-auth',
+    )
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

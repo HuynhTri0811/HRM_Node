@@ -10,6 +10,9 @@ export class CreateDepartmentDto {
   @IsNotEmpty({ message: 'Tên phòng ban là bắt buộc' })
   @IsString({ message: 'Tên phòng ban phải là chuỗi' })
   Name_Department!: string;
+
+  @IsNumber({},{ message: 'Mã phòng ban phải là số' })
+  Code_Department_Parent!: number;
 }
 
 export class UpdateDepartmentDto {

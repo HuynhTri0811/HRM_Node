@@ -20,6 +20,10 @@ export class NhanSu {
   @Column({ name: 'password', length: 255, nullable: true, select: false })
   password?: string;
 
+  @ApiProperty({ description: 'User role', example: 'admin', enum: ['admin', 'user'] })
+  @Column({ name: 'role', length: 50, default: 'user' })
+  role!: string;
+
   @ApiPropertyOptional({ description: 'Phone number', example: '0123456789' })
   @Column({ name: 'so_dien_thoai', length: 20, nullable: true })
   soDienThoai?: string;
