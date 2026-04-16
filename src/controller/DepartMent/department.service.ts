@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { LogService } from '../../logs_hrm/log.service';
 import { Department } from './deparment.entity';
-import { CreateDepartmentDto } from './department.dto';
+import { CreateDepartmentDto, UpdateDepartmentDto } from './department.dto';
 
 @Injectable()
 export class DepartmentService {
@@ -40,6 +40,28 @@ export class DepartmentService {
       {
         throw new Error('Error creating department');
       }
+    
+    }
+
+    async update(id: number, departmentData: UpdateDepartmentDto): Promise<Department> {
+      try
+      {
+        const departmentUpdate = {
+                ...departmentData,
+                isDeleted: false,
+            };
+         await this.departmentRepository.update(id, departmentUpdate);
+         const department = await this.departmentRepository.findOne({ where: { id, isDeleted: false } });
+         if (!department) {
+          throw new Error('Department not found');
+        }
+        return department;
+      }
+      catch
+      {
+        throw new Error('Error creating department');
+      }
+    
     }
      async delete(id: number): Promise<void> {
               const result = await this.departmentRepository.update(id, { isDeleted: true });

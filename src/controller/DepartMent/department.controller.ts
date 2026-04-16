@@ -1,10 +1,10 @@
-import { Body, Controller, DefaultValuePipe, Delete, Get, HttpException, HttpStatus, Param, ParseIntPipe, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, DefaultValuePipe, Delete, Get, HttpException, HttpStatus, Param, ParseIntPipe, Patch, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { Department } from './deparment.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ApiBody, ApiOperation, ApiQuery, ApiResponse, ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { DepartmentService } from './department.service';
-import { CreateDepartmentDto } from './department.dto';
+import { CreateDepartmentDto, UpdateDepartmentDto } from './department.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Permissions } from 'src/auth/permissions.decorator';
 import { PermissionsGuard } from 'src/auth/permissions.guard';
@@ -28,6 +28,8 @@ export class DepartmentController {
   ): Promise<Department[]> {
     return this.departmentService.findAll(limit, page);
   }
+
+
 
 
   @Post()
@@ -76,6 +78,27 @@ export class DepartmentController {
   async delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
     try {
       return await this.departmentService.delete(id);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      if (errorMessage.includes('đã tồn tại')) {
+        throw new HttpException(errorMessage, HttpStatus.CONFLICT);
+      }
+      throw new HttpException(errorMessage, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Put(':id')
+  @UseGuards(JwtAuthGuard)
+  @Permissions('department', 'update')
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({ summary: 'Update a department (requires permission)' })
+  @ApiResponse({ status: 200, description: 'Department updated successfully' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 403, description: 'Forbidden - insufficient permissions' })
+  @ApiResponse({ status: 400, description: 'Bad request - validation error' })
+  async update(@Param('id', ParseIntPipe) id: number, @Body() updateDepartmentDto: UpdateDepartmentDto): Promise<Department> {
+    try {
+      return await this.departmentService.update(id, updateDepartmentDto  );
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       if (errorMessage.includes('đã tồn tại')) {

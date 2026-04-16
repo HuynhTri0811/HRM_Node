@@ -10,6 +10,8 @@ import { AuthModule } from './auth/auth.module';
 import { LoggingInterceptor } from './common/logging.interceptor';
 import configuration from './config/configuration';
 import { DepartmentModule } from './controller/DepartMent/deparment.module';
+import { Company } from './controller/DepartMent/company.entity';
+import { CompanyModule } from './controller/DepartMent/company.module';
 
 @Module({
   imports: [
@@ -22,7 +24,8 @@ import { DepartmentModule } from './controller/DepartMent/deparment.module';
     NhanSuModule,
     LogModule,
     AuthModule,
-    DepartmentModule
+    DepartmentModule,
+    CompanyModule
   ],
   controllers: [AppController],
   providers: [
